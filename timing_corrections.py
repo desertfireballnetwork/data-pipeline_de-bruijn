@@ -71,7 +71,7 @@ def get_uC_firmware_version_from_log(log_file):
     
     fw_string = dfn_utils.search_dfn_operation_log(log_file, key='leostick_version', module='interval_control_lin')
     
-    print(fw_string)
+    #print(fw_string)
     
     if ("built: 10:56:18 Apr  1 2014" in fw_string or
        "camera triggering fixed : 10:48:31 Oct 21 2014" in fw_string):
@@ -234,7 +234,7 @@ def correct_timing(table, firmware):
     table.meta['timing_corrected'] = True
     table.meta['timing_correction_dictionary_version'] = 'DEBUG'
     
-    print('Timing has been corrected using firware version information.')
+    #print('Timing has been corrected using firware version information.')
     
     
         
