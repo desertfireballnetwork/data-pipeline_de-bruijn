@@ -26,7 +26,8 @@ import de_bruijn
 MANUAL_OVERRIDE_LIST = [
     {'telescope': 'DFNKIT11', 'start_date': Time('2018-09-18'), 'end_date': Time('2019-01-31'), 'firmware': 'april2014'},
     {'telescope': 'DFNSMALL58', 'start_date': Time('2018-10-12'), 'end_date': Time('2018-12-04'), 'firmware': 'april2014'},
-    {'telescope': 'DFNEXT029', 'start_date': Time('2019-01-01'), 'end_date': Time('2019-06-01'), 'firmware': 'boogardie_PW_1_0_continuous'}
+    {'telescope': 'DFNEXT029', 'start_date': Time('2019-01-01'), 'end_date': Time('2019-06-01'), 'firmware': 'boogardie_PW_1_0_continuous'},
+    {'telescope': 'DFNSMALL12', 'start_date': Time('2020-07-05'), 'end_date': Time('2020-10-17'), 'firmware': 'boogardie_PW_1_0_continuous'}
     ]
 
 
