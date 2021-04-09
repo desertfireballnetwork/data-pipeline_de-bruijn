@@ -75,12 +75,12 @@ def get_uC_firmware_version_from_log(log_file):
     
     #print(fw_string)
     
-    if ("built: 10:56:18 Apr  1 2014" in fw_string or
+    if ("uilt: 10:56:18 Apr  1 2014" in fw_string or
        "camera triggering fixed : 10:48:31 Oct 21 2014" in fw_string):
         fw = 'april2014'
-    elif ("built:May 30 2017 16:37:45 note:kit" in fw_string or
-          "built:May 26 2017 10:51:00 note:kit, small and ext compatible" in fw_string or
-          "built:Jul 23 2015 17:33:48 note:pulse frequency encoding, bulb mode" in fw_string):
+    elif ("uilt:May 30 2017 16:37:45 note:kit" in fw_string or
+          "uilt:May 26 2017 10:51:00 note:kit, small and ext compatible" in fw_string or
+          "uilt:Jul 23 2015 17:33:48 note:pulse frequency encoding, bulb mode" in fw_string):
         fw = 'june2017'
     else:
         raise UnknownEncodingError()
