@@ -27,7 +27,8 @@ MANUAL_OVERRIDE_LIST = [
     {'telescope': 'DFNKIT11', 'start_date': Time('2018-09-18'), 'end_date': Time('2019-01-31'), 'firmware': 'april2014'},
     {'telescope': 'DFNSMALL58', 'start_date': Time('2018-10-12'), 'end_date': Time('2018-12-04'), 'firmware': 'april2014'},
     {'telescope': 'DFNEXT029', 'start_date': Time('2019-01-01'), 'end_date': Time('2019-06-01'), 'firmware': 'boogardie_PW_1_0_continuous'},
-    {'telescope': 'DFNSMALL12', 'start_date': Time('2020-07-05'), 'end_date': Time('2020-10-17'), 'firmware': 'boogardie_PW_1_0_continuous'}
+    {'telescope': 'DFNSMALL12', 'start_date': Time('2020-07-05'), 'end_date': Time('2020-10-17'), 'firmware': 'boogardie_PW_1_0_continuous'},
+    {'telescope': 'DFNSMALL45', 'start_date': Time('2020-05-10'), 'end_date': Time('2021-06-01'), 'firmware': 'boogardie_PW_1_0_continuous'}
     ]
 
 
@@ -94,6 +95,14 @@ def correct_timing_smart(table):
     Correct points timing
     '''
     logger = logging.getLogger('trajectory')
+    
+    if not 'origin' in table.meta:
+        logger.error('Unknown data origin, cannot correct de Bruijn timing')
+        return
+    if 'Desert Fireball Network' not in table.meta['origin']:
+        logger.warning('Astrometric data not from DFN ({}), timing correction not implemented'.format(table.meta['origin']))
+        return
+    
     
     # find out what encoding was used
     try:
