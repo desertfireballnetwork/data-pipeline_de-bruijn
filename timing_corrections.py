@@ -28,7 +28,7 @@ MANUAL_OVERRIDE_LIST = [
     {'telescope': 'DFNSMALL58', 'start_date': Time('2018-10-12'), 'end_date': Time('2018-12-04'), 'firmware': 'april2014'},
     {'telescope': 'DFNEXT029', 'start_date': Time('2019-01-01'), 'end_date': Time('2019-06-01'), 'firmware': 'boogardie_PW_1_0_continuous'},
     {'telescope': 'DFNSMALL12', 'start_date': Time('2020-07-05'), 'end_date': Time('2020-10-17'), 'firmware': 'boogardie_PW_1_0_continuous'},
-    {'telescope': 'DFNSMALL45', 'start_date': Time('2020-05-10'), 'end_date': Time('2021-06-01'), 'firmware': 'boogardie_PW_1_0_continuous'}
+    {'telescope': 'DFNSMALL45', 'start_date': Time('2020-05-10'), 'end_date': Time('2021-06-01'), 'firmware': 'oukaimeden_PW_ends_only'}
     ]
 
 
@@ -131,9 +131,9 @@ def determine_firmware_version(table, table_loc='trajectory'):
     
     # try reading interval log first
     try:
-        if table_loc is 'trajectory':
+        if table_loc == 'trajectory':
             event_dir = os.path.dirname(os.path.realpath(os.path.dirname(table.meta['self_disk_path']))) # UNSAFE FIXME
-        elif table_loc is 'camera':
+        elif table_loc == 'camera':
             event_dir = os.path.dirname(table.meta['self_disk_path'])
         else:
             raise UnknownEncodingError("cannot find camera base directory")
@@ -213,7 +213,7 @@ def correct_timing(table, firmware):
                             format='sec')
         table.meta['timing_de_bruijn_encoding_type'] = 'pulse_width'
     
-    elif firmware == 'boogardie_PW_1_0_continuous':
+    elif firmware == 'boogardie_PW_1_0_continuous' or firmware == 'oukaimeden_PW_ends_only':
         offset = TimeDelta(0., format='sec')
         element_shift = TimeDelta(0.05 * is_end_binary_int,
                             format='sec')
