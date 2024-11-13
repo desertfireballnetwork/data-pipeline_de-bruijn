@@ -99,7 +99,7 @@ def correct_timing_smart(table):
     if not 'origin' in table.meta:
         logger.error('Unknown data origin, cannot correct de Bruijn timing')
         return
-    if 'Desert Fireball Network' not in table.meta['origin']:
+    if not 'Desert Fireball Network' in table.meta['origin']:
         logger.warning('Astrometric data not from DFN ({}), timing correction not implemented'.format(table.meta['origin']))
         return
     
