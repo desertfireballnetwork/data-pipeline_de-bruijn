@@ -181,7 +181,7 @@ def correct_timing(table, firmware):
     period = 1 / frequency
     
     
-    table['zero_or_one'] = [db_seq[int(i)] for i in table['de_bruijn_sequence_element_index']]
+    table['zero_or_one'] = np.array([db_seq[int(i)] for i in table['de_bruijn_sequence_element_index']]).astype(bool)
     
     is_end_binary_int = np.asarray(table['dash_start_end'] == 'E', dtype='int')
     
