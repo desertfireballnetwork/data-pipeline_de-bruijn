@@ -118,17 +118,43 @@ def correct_timing_smart(table):
     
 
 
+def guess_firmware_version(telescope, sequence_reset_time):
+    '''
+    Best-assumption firmware version, for use when the interval log can't be
+    read or doesn't carry a leostick_version line (eg. logs from before that
+    logging was added). Not a substitute for reading the log when possible -
+    only a fallback.
+    '''
+    logger = logging.getLogger('trajectory')
+
+    sequence_reset_time = dfn_utils.round_to_nearest_30_seconds(sequence_reset_time)
+    if ('DFNEXT' in telescope or
+        'DFNKIT' in telescope or
+        ('DFNSMALL' in telescope and (sequence_reset_time > Time('2017-06-01') and sequence_reset_time < Time('2017-09-15')))):
+        fw = 'june2017'
+        logger.warning('Determined the firmware version using dodgy assumptions. FW: {}'.format(fw))
+        return fw
+
+    elif 'DFNSMALL' in telescope:
+        logger.warning('Determined the firmware version using dodgy assumptions')
+        fw = 'april2014'
+        logger.warning('Determined the firmware version using dodgy assumptions. FW: {}'.format(fw))
+        return fw
+    else:
+        raise UnknownEncodingError()
+
+
 def determine_firmware_version(table, table_loc='trajectory'):
     '''
-    
+
         table_loc: which folder self_disk_path points to.
             'trajectory' (default): trajectory folder (need to a bit of path navigation in this case)
             'camera': camera folder
     '''
     logger = logging.getLogger('trajectory')
-    
+
     telescope = table.meta['telescope']
-    
+
     # try reading interval log first
     try:
         if table_loc == 'trajectory':
@@ -137,35 +163,21 @@ def determine_firmware_version(table, table_loc='trajectory'):
             event_dir = os.path.dirname(table.meta['self_disk_path'])
         else:
             raise UnknownEncodingError("cannot find camera base directory")
-        
+
         # if for some reason that camera at that particular time was not running the expected FW
         manual_override = check_manual_fw_override(table)
         if manual_override:
             logger.info('camera firmware corresponds to entry in manual firmware override list. Using ovveride found: {}'.format(manual_override))
             return manual_override
-        
+
         interval_log_file = dfn_utils.find_log_file(event_dir, suffix='_log_interval', extension='txt', system_number=telescope)
         return get_uC_firmware_version_from_log(interval_log_file)
     except Exception as err:
         logger.error(err)
         pass
-    
+
     # default to best assumption
-    sequence_reset_time = dfn_utils.round_to_nearest_30_seconds(table.meta['isodate_start_obs'])
-    if ('DFNEXT' in telescope or
-        'DFNKIT' in telescope or
-        ('DFNSMALL' in telescope and (sequence_reset_time > Time('2017-06-01') and sequence_reset_time < Time('2017-09-15')))):
-        fw = 'june2017'
-        logger.warning('Determined the firmware version using dodgy assumptions. FW: {}'.format(fw))
-        return fw
-    
-    elif 'DFNSMALL' in telescope:
-        logger.warning('Determined the firmware version using dodgy assumptions')
-        fw = 'april2014'
-        logger.warning('Determined the firmware version using dodgy assumptions. FW: {}'.format(fw))
-        return fw
-    else:
-        raise UnknownEncodingError()
+    return guess_firmware_version(telescope, table.meta['isodate_start_obs'])
 
 
 def correct_timing(table, firmware):
